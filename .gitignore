@@ -1,0 +1,4 @@
+# .gitignore
+
+# Ignore all files inside the data folder
+data/*
