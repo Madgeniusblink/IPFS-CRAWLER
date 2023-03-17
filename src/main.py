@@ -13,20 +13,18 @@ class WebParser:
 
     def crawl(self):
         response = requests.get(self.url)
-
-        # Check if the request was successful
+         # Check if the request was successful
         if response.status_code == 200:
             print("Crawling the URL...")
             soup = BeautifulSoup(response.text, 'html.parser')
-
             # Find all links with .json extension
             json_links = soup.find_all('a', href=re.compile(r'\.json'))
-
             # Ensure the data folder exists
             if not os.path.exists('data'):
                 os.makedirs('data')
 
             print("Writing .json links to 'data/links.txt'...")
+
             with open("data/links.txt", "w") as output_file:
                 for link in json_links:
                     json_url = f"{self.url}/{link['href']}"
@@ -42,10 +40,8 @@ class WebParser:
 
     def parse_links(self):
         print("Parsing 'data/links.txt' and extracting filenames without the .json extension...")
-
         # Use regex to find filenames with only numbers before .json
         pattern = re.compile(r'^\d+\.json')
-
         # Extract numbers without the .json extension
         for link in self.links:
             filename = link.strip().split('/')[-1]
@@ -63,10 +59,14 @@ class WebParser:
 
         print("Numbers have been written to 'data/numbers.json'.")
 
-
-if __name__ == "__main__":
-    url = "https://bafybeicoln5rvccttgypzo26irjlskslnfynkzig6bowpsj6ay45geeice.ipfs.nftstorage.link"
+        
+def main(url):
     parser = WebParser(url)
 
     if parser.crawl():
         parser.parse_links()
+
+
+if __name__ == "__main__":
+    url = "https://bafybeicoln5rvccttgypzo26irjlskslnfynkzig6bowpsj6ay45geeice.ipfs.nftstorage.link"
+    main(url)
